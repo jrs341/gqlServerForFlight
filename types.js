@@ -7,8 +7,6 @@ const typeDefs = gql`
 
   type Query {
     airportInfo(ids:[String]): [AirPortInfo]
-    weatherInfo(ids:[String]): [WeatherInfo]
-    getTivoliRiverInfo: TivoliRiverInfo
   }
 
   type AirPortInfo {
@@ -16,35 +14,28 @@ const typeDefs = gql`
     faaCode: String
     runways: [String]
     location: String
+    airPortWeatherInfo: WeatherInfo
   }
 
   type WeatherInfo {
+    current: Weather
+    forecast: Weather
+    mos: Weather
+    
+  }
+
+  type Weather {
+    cardinalWindDirection: String
+    conditions: [Weather]
     currentTempF: String
+    forecast: Weather
     relativeHumidity: String
     summaryOfCloudCoverage: String
     visibility: String
-    windSpeed: String
+    weatherPeriod1: Weather
+    weatherPeriod2: Weather
     windDirection: String
-    cardinalWindDirection: String
-    weatherPeriod1: WeatherInfo
-  }
-
-  type RiverInfo {
-    date: String
-    level: String
-  }
-
-  type TrendInfo {
-    lastReading: RiverInfo
-    sixHourDelta: String
-    twelveHourDelta: String
-    twentyFourHourDelta: String
-    fortyEightHourDelta: String
-  }
-
-  type TivoliRiverInfo {
-    data: [RiverInfo]
-    trendInfo: TrendInfo
+    windSpeed: String
   }
 `;
 
