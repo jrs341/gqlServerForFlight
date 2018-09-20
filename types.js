@@ -1,8 +1,5 @@
 const { gql } = require('apollo-server')
 
-// Type definitions define the "shape" of your data and specify
-// which ways the data can be fetched from the GraphQL server.
-
 const typeDefs = gql`
 
   type Query {
@@ -18,20 +15,16 @@ const typeDefs = gql`
   }
 
   type WeatherInfo {
-    allData: Weather
     current: Weather
     forecast: Weather
-    mos: Weather
   }
 
   type Weather {
     cardinalWindDirection: String
-    conditions: [Weather]
     currentTempF: String
     tempMinF: String
     tempMaxF: String
     forecast: Weather
-    mosType: Weather
     relativeHumidity: String
     summaryOfCloudCoverage: String
     timeOffSet: String

@@ -53,10 +53,6 @@ const resolvers = {
       const forecast = parent.forecast
       forecast.mos = parent.mos
       return forecast
-    },
-
-    mos: (parent) => {
-      return parent.mos
     }
   },
 
@@ -67,16 +63,8 @@ const resolvers = {
       return directions[(direction % 16)]
     },
 
-    conditions: (parent) => {
-      return parent.conditions
-    },
-
     currentTempF: (parent) => {
         return Math.round((parent.tempC * (9/5)) + 32).toFixed(0)
-    },
-
-    forecast: (parent) => {
-      return parent.forecast
     },
 
     relativeHumidity: (parent) => {
