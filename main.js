@@ -10,6 +10,7 @@ const server = new ApolloServer({
   cors: true,
   introspection: true,
   playground: true,
+  engine: true,
   context: {}
 })
 
