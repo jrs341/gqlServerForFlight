@@ -13,18 +13,6 @@ const resolvers = {
         return res
       })
     }
-
-    // weatherInfo: (parent, query) => {
-    //   const data = Promise.all(query.ids.map(id => {
-    //     return axios.get('https://qa.foreflight.com/weather/report/' + id)
-    //     .then(res => {
-    //       return res.data.report
-    //     })
-    //   }))
-    //   return data.then(res => {
-    //     return res
-    //   })
-    // }
   },
 
   AirPortInfo: {
@@ -62,7 +50,9 @@ const resolvers = {
     },
 
     forecast: (parent) => {
-      return parent.forecast
+      const forecast = parent.forecast
+      forecast.mos = parent.mos
+      return forecast
     },
 
     mos: (parent) => {
@@ -92,10 +82,70 @@ const resolvers = {
     relativeHumidity: (parent) => {
       return parent.relativeHumidity
     },
-// need to clarify this one
+
     summaryOfCloudCoverage: (parent) => {
-      // return parent.cloudLayers
-      return parent.text
+      let cloudCoverage = ''
+      const coverage = ['ovc', 'bkn', 'few', 'sct']
+      for (let i = 0; i < coverage.length; i++) {
+        for (let j = 0; j < parent.cloudLayers.length; j++) {
+          if (coverage[i] == parent.cloudLayers[j].coverage) {
+            cloudCoverage = parent.cloudLayers[j]
+            return cloudCoverage.coverage + ' at ' + cloudCoverage.altitudeFt + 'ft'
+          }
+        }
+      }
+      if (cloudCoverage == '') {
+        return 'nil'
+      }
+    },
+// since there is no temp in the forcast I am using the mos data to determine the lowest min 
+  // and the highest max in the second and third forcast periods
+    tempMinF: (parent) => {
+      const periodStart = new Date(Date.parse(parent.period.dateStart)).getTime()
+      const periodEnd = new Date(Date.parse(parent.period.dateEnd)).getTime()
+      const minTemps = [] 
+      parent.mos.forecast.conditions.map(condition => {
+        const mosPeriodStart = new Date(Date.parse(condition.period.dateStart)).getTime()
+        const mosPeriodEnd = new Date(Date.parse(condition.period.dateEnd)).getTime()
+        if (mosPeriodStart >= periodStart && periodEnd <= mosPeriodEnd) {
+          minTemps.push(Math.floor((condition.tempMinC * (9/5)) + 32).toFixed(0))
+        } else {
+          minTemps.push(1000)
+        }
+      })
+      return Math.min.apply(null, minTemps)
+    },
+
+    tempMaxF: (parent) => {
+      const periodStart = new Date(Date.parse(parent.period.dateStart)).getTime()
+      const periodEnd = new Date(Date.parse(parent.period.dateEnd)).getTime()
+      const maxTemps = [] 
+      parent.mos.forecast.conditions.map(condition => {
+        const mosPeriodStart = new Date(Date.parse(condition.period.dateStart)).getTime()
+        const mosPeriodEnd = new Date(Date.parse(condition.period.dateEnd)).getTime()
+        if (mosPeriodStart >= periodStart && periodEnd <= mosPeriodEnd) {
+          maxTemps.push(Math.round((condition.tempMaxC * (9/5)) + 32).toFixed(0))
+        } else {
+          maxTemps.push(-1000)
+        }
+      })
+      return Math.max.apply(null, maxTemps)
+    },
+
+    timeOffSet: (parent) => {
+      const today = new Date()
+      const dateStart = new Date(Date.parse(parent.period.dateStart))
+      const offset = Math.abs(today.getTime() - dateStart.getTime())
+      const hours = Math.floor((offset/(1000*60*60))%24).toFixed(0)
+      const minutes = ((offset/(1000*60))%60).toFixed(0)
+      const hh = hours < 10
+        ? '0' + hours
+        : hours
+      const mm = minutes < 10
+        ? '0' + minutes
+        : minutes
+      const time = hh + ':' + mm
+      return time
     },
 // need to clarify this one
     visibility: (parent) => {
@@ -103,37 +153,28 @@ const resolvers = {
     },
 
     weatherPeriod1: (parent) => {
-      return parent.conditions[1]
+      const weatherPeriod1 = parent.conditions[1]
+      weatherPeriod1.mos = parent.mos
+      return weatherPeriod1
     },
 
     weatherPeriod2: (parent) => {
-      return parent.conditions[2]
+      const weatherPeriod2 = parent.conditions[2]
+      weatherPeriod2.mos = parent.mos
+      return weatherPeriod2
     },
      
-    windDirection: (parent) => {
-      console.log('** parent **', parent.wind)
-      // if(parent.hasOwnProperty('conditions')){
-      //   if (parent.conditions.wind.variable){
-      //     return 'variable'
-      //   } else {
-      //     return parent.conditions.wind.direction
-      //   }
-      // } else {
-        if (parent.wind.variable) {
-          return 'variable'
-        } else {
-          return parent.wind.direction
-        }
-      // }
+    windDirectionTrueN: (parent) => {
+      if (parent.wind.variable) {
+        return 'variable'
+      } else {
+        return parent.wind.direction
+      }
     },
 
     windSpeed: (parent) => {
       // 1 knot = 1.15078 mph
-      // if (parent.hasOwnProperty('conditions')){
-      //   return Math.round(parent.conditions.wind.speedKts * .868976).toFixed(0)
-      // } else {
-        return Math.round(parent.wind.speedKts * .868976).toFixed(0)
-      // } 
+      return Math.round(parent.wind.speedKts * .868976).toFixed(0)
     }
   }
 }

@@ -18,23 +18,27 @@ const typeDefs = gql`
   }
 
   type WeatherInfo {
+    allData: Weather
     current: Weather
     forecast: Weather
     mos: Weather
-    
   }
 
   type Weather {
     cardinalWindDirection: String
     conditions: [Weather]
     currentTempF: String
+    tempMinF: String
+    tempMaxF: String
     forecast: Weather
+    mosType: Weather
     relativeHumidity: String
     summaryOfCloudCoverage: String
+    timeOffSet: String
     visibility: String
     weatherPeriod1: Weather
     weatherPeriod2: Weather
-    windDirection: String
+    windDirectionTrueN: String
     windSpeed: String
   }
 `;
