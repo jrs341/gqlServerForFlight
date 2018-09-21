@@ -164,7 +164,7 @@ const resolvers = {
       }
     },
 
-    windSpeed: (parent) => {
+    windSpeedMPH: (parent) => {
       // 1 knot = 1.15078 mph
       return Math.round(parent.wind.speedKts * .868976).toFixed(0)
     }

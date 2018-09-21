@@ -33,7 +33,7 @@ const typeDefs = gql`
     weatherPeriod1: Weather
     weatherPeriod2: Weather
     windDirectionTrueN: String
-    windSpeed: String
+    windSpeedMPH: String
   }
 `;
 
