@@ -16,31 +16,35 @@ const resolvers = {
   },
 
   AirPortInfo: {
-    icao: (parent) => {
-      return parent.icao
-    },
-
-    faaCode: (parent) => {
-      return parent.faaCode
-    },
-
-    runways: (parent) => {
-      return parent.runways.map(runway => {
-        return runway.ident
-      })
-    },
-
-    location: (parent) => {
-      const location = parent.latitude + ' ' + parent.longitude
-      return location
-    },
-
     airPortWeatherInfo: (parent) => {
       const weather = axios.get('https://qa.foreflight.com/weather/report/' + parent.icao)
         .then(res => {
           return res.data.report
       })
       return weather
+    },
+
+    faaCode: (parent) => {
+      return parent.faaCode
+    },
+
+    icao: (parent) => {
+      return parent.icao
+    },
+
+   location: (parent) => {
+      const location = parent.latitude + ' ' + parent.longitude
+      return location
+    },
+
+    name: (parent) => {
+      return parent.name
+    },
+
+    runways: (parent) => {
+      return parent.runways.map(runway => {
+        return runway.ident
+      })
     }
   },
 
