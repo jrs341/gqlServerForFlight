@@ -33,7 +33,9 @@ const resolvers = {
     },
 
    location: (parent) => {
-      const location = parent.latitude + ' ' + parent.longitude
+      const location = {}
+      location.latitude = parent.latitude
+      location.longitude = parent.longitude
       return location
     },
 
@@ -45,6 +47,16 @@ const resolvers = {
       return parent.runways.map(runway => {
         return runway.ident
       })
+    }
+  },
+
+  Location: {
+    latitude: (parent) => {
+      return parent.latitude
+    },
+
+    longitude: (parent) => {
+      return parent.longitude
     }
   },
 

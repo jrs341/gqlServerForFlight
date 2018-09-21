@@ -10,9 +10,14 @@ const typeDefs = gql`
     airportWeatherInfo: WeatherInfo
     faaCode: String
     icao: String
-    location: String
+    location: Location
     name: String
     runways: [String] 
+  }
+
+  type Location {
+    latitude: String
+    longitude: String
   }
 
   type WeatherInfo {
