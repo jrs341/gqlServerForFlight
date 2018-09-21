@@ -16,7 +16,7 @@ const resolvers = {
   },
 
   AirPortInfo: {
-    airPortWeatherInfo: (parent) => {
+    airportWeatherInfo: (parent) => {
       const weather = axios.get('https://qa.foreflight.com/weather/report/' + parent.icao)
         .then(res => {
           return res.data.report

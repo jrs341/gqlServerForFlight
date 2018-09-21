@@ -7,7 +7,7 @@ const typeDefs = gql`
   }
 
   type AirPortInfo {
-    airPortWeatherInfo: WeatherInfo
+    airportWeatherInfo: WeatherInfo
     faaCode: String
     icao: String
     location: String
