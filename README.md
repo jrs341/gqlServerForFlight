@@ -20,6 +20,7 @@ Open [http://localhost:3010](http://localhost:3010) to view it in the browser.
 ## Notes
 
 To avoid installing and running the app locally you can also view it at the following location [https://gql-server-for-flight.herokuapp.com/](https://gql-server-for-flight.herokuapp.com/)
+- ### If running locally code out or remove line 13 in the main.js file.
 - Copy and paste the following query into left side of the screen on either the local or deployed version.
 - Enter the airport icao identifiers into the array following the ids:, you must use "" around the icao id.
 ```
